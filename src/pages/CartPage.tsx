@@ -1,4 +1,4 @@
-import { useCart } from '@/context/CartContext';
+import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 
 export const CartPage = () => {
-  const { items, removeFromCart, updateQuantity, getTotalPrice, getTotalItems } = useCart();
+  const { items, removeFromCart, updateQuantity, totalPrice, totalItems } = useCart();
   const navigate = useNavigate();
 
   if (items.length === 0) {
@@ -33,12 +33,12 @@ export const CartPage = () => {
   return (
     <div className="min-h-screen py-12">
       <div className="container mx-auto px-4">
-        <h1 className="font-display font-bold text-4xl mb-8">Корзина ({getTotalItems()})</h1>
+        <h1 className="font-display font-bold text-4xl mb-8">Корзина ({totalItems})</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
-              <Card key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}`} className="p-6">
+              <Card key={`${item.product.id}-${item.size}-${item.color}`} className="p-6">
                 <div className="flex gap-6">
                   <div className="w-32 h-32 bg-secondary rounded-lg overflow-hidden flex-shrink-0">
                     <img
@@ -55,13 +55,13 @@ export const CartPage = () => {
                           {item.product.name}
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                          {item.selectedSize} / {item.selectedColor}
+                          {item.size} / {item.color}
                         </p>
                       </div>
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => removeFromCart(item.product.id)}
+                        onClick={() => removeFromCart(item.product.id, item.size, item.color)}
                       >
                         <Icon name="Trash2" size={20} />
                       </Button>
@@ -72,7 +72,7 @@ export const CartPage = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.product.id, item.size, item.color, item.quantity - 1)}
                         >
                           <Icon name="Minus" size={16} />
                         </Button>
@@ -80,7 +80,7 @@ export const CartPage = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.product.id, item.size, item.color, item.quantity + 1)}
                         >
                           <Icon name="Plus" size={16} />
                         </Button>
@@ -101,12 +101,12 @@ export const CartPage = () => {
               
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-muted-foreground">
-                  <span>Товары ({getTotalItems()})</span>
-                  <span>{getTotalPrice().toLocaleString('ru-RU')} ₽</span>
+                  <span>Товары ({totalItems})</span>
+                  <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Доставка</span>
-                  <span>{getTotalPrice() >= 5000 ? 'Бесплатно' : '500 ₽'}</span>
+                  <span>{totalPrice >= 5000 ? 'Бесплатно' : '500 ₽'}</span>
                 </div>
               </div>
 
@@ -114,7 +114,7 @@ export const CartPage = () => {
 
               <div className="flex justify-between text-xl font-display font-bold mb-6">
                 <span>Итого:</span>
-                <span>{(getTotalPrice() + (getTotalPrice() >= 5000 ? 0 : 500)).toLocaleString('ru-RU')} ₽</span>
+                <span>{(totalPrice + (totalPrice >= 5000 ? 0 : 500)).toLocaleString('ru-RU')} ₽</span>
               </div>
 
               <Button

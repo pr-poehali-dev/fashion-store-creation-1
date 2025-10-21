@@ -25,19 +25,19 @@ export const ProductPage = () => {
   }
 
   const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
+    if (!selectedSize) {
       toast({
-        title: 'Выберите размер и цвет',
-        description: 'Пожалуйста, выберите размер и цвет товара',
+        title: 'Выберите размер',
+        description: 'Пожалуйста, выберите размер товара',
         variant: 'destructive',
       });
       return;
     }
 
-    addToCart(product, selectedSize, selectedColor);
+    addToCart(product, selectedSize);
     toast({
       title: 'Товар добавлен в корзину',
-      description: `${product.name} - ${selectedSize}, ${selectedColor}`,
+      description: `${product.name} - ${selectedSize}`,
     });
   };
 
@@ -90,20 +90,7 @@ export const ProductPage = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-semibold mb-3">Цвет</label>
-                <div className="flex flex-wrap gap-2">
-                  {product.colors.map((color) => (
-                    <Button
-                      key={color}
-                      variant={selectedColor === color ? 'default' : 'outline'}
-                      onClick={() => setSelectedColor(color)}
-                    >
-                      {color}
-                    </Button>
-                  ))}
-                </div>
-              </div>
+
             </div>
 
             <div className="flex gap-4 mt-auto">
