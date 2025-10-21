@@ -15,23 +15,25 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      <section className="relative h-[90vh] flex items-center justify-center bg-gradient-to-br from-background via-secondary to-background">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 tracking-tight">
-            FASHION
+      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary to-background opacity-90 z-10"></div>
+        <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: 'url(https://cdn.poehali.dev/projects/e27a01a1-f04b-474b-8af0-865e7cdde5db/files/287611d7-f8e9-4fb3-8799-ac9c804201d5.jpg)'}}></div>
+        <div className="container mx-auto px-4 text-center relative z-20">
+          <h1 className="text-6xl md:text-8xl font-display font-bold mb-6 tracking-tighter">
+            NOIR<span className="text-primary">.</span>
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Минималистичная мода для современных людей
+          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto font-light">
+            Минималистичная одежда для современных людей
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/catalog">
-              <Button size="lg" className="text-lg px-8">
+              <Button size="lg" className="text-lg px-10 h-14 w-full sm:w-auto">
                 Смотреть каталог
               </Button>
             </Link>
-            <Link to="/contacts">
-              <Button size="lg" variant="outline" className="text-lg px-8">
-                Связаться с нами
+            <Link to="/contact">
+              <Button size="lg" variant="outline" className="text-lg px-10 h-14 w-full sm:w-auto">
+                Связаться
               </Button>
             </Link>
           </div>

@@ -43,21 +43,21 @@ export default function Footer() {
 
           <div>
             <h4 className="font-semibold font-display mb-4">Контакты</h4>
-            <ul className="space-y-3 text-sm text-white/70">
+            <ul className="space-y-3 text-sm text-background/70">
               <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4" />
+                <Icon name="Phone" size={16} />
                 <a href="tel:+79991234567" className="hover:text-primary transition-colors">
                   +7 (999) 123-45-67
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
+                <Icon name="Mail" size={16} />
                 <a href="mailto:info@noir.shop" className="hover:text-primary transition-colors">
                   info@noir.shop
                 </a>
               </li>
               <li className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 mt-0.5" />
+                <Icon name="MapPin" size={16} />
                 <span>Москва, ул. Примерная, 123</span>
               </li>
             </ul>
@@ -70,29 +70,29 @@ export default function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors"
+                className="h-10 w-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-primary transition-colors"
               >
-                <Instagram className="h-5 w-5" />
+                <Icon name="Instagram" size={20} />
               </a>
               <a
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors"
+                className="h-10 w-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-primary transition-colors"
               >
-                <Facebook className="h-5 w-5" />
+                <Icon name="Facebook" size={20} />
               </a>
               <a
                 href="mailto:info@noir.shop"
-                className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors"
+                className="h-10 w-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-primary transition-colors"
               >
-                <Mail className="h-5 w-5" />
+                <Icon name="Mail" size={20} />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-8 pt-8 text-center text-sm text-white/50">
+        <div className="border-t border-background/10 mt-8 pt-8 text-center text-sm text-background/50">
           <p>&copy; {new Date().getFullYear()} NOIR. Все права защищены.</p>
         </div>
       </div>

@@ -1,271 +1,229 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 
-const CheckoutPage = () => {
-  const { items, totalPrice, clearCart } = useCart();
+export const CheckoutPage = () => {
+  const { items, getTotalPrice, clearCart } = useCart();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     address: '',
     city: '',
-    zipCode: '',
-    paymentMethod: 'card',
-    comment: '',
+    postalCode: '',
+    paymentMethod: 'card' as 'card' | 'cash',
   });
 
-  const [orderSubmitted, setOrderSubmitted] = useState(false);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.address) {
+      toast({
+        title: 'Заполните все поля',
+        description: 'Пожалуйста, заполните все обязательные поля формы',
+        variant: 'destructive',
+      });
+      return;
+    }
 
-  if (items.length === 0 && !orderSubmitted) {
+    toast({
+      title: 'Заказ оформлен!',
+      description: 'Спасибо за покупку. Мы свяжемся с вами в ближайшее время.',
+    });
+
+    clearCart();
+    navigate('/');
+  };
+
+  if (items.length === 0) {
     navigate('/cart');
     return null;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setOrderSubmitted(true);
-    clearCart();
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  if (orderSubmitted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-md mx-auto text-center">
-            <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Icon name="Check" size={40} className="text-white" />
-            </div>
-            <h1 className="text-3xl font-bold mb-4">Заказ оформлен!</h1>
-            <p className="text-muted-foreground mb-8">
-              Спасибо за покупку! Мы отправили подтверждение на вашу почту. Наш менеджер свяжется с вами в ближайшее время.
-            </p>
-            <button
-              onClick={() => navigate('/')}
-              className="bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-primary/90 transition-colors"
-            >
-              Вернуться на главную
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const deliveryFee = getTotalPrice() >= 5000 ? 0 : 500;
+  const totalPrice = getTotalPrice() + deliveryFee;
 
   return (
     <div className="min-h-screen py-12">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold mb-8">Оформление заказа</h1>
+        <h1 className="font-display font-bold text-4xl mb-8">Оформление заказа</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="border border-border rounded-lg p-6 bg-card">
-                <h2 className="text-2xl font-semibold mb-6">Контактные данные</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <Card className="p-6">
+                <h2 className="font-display font-bold text-2xl mb-6">Контактная информация</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Имя <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
+                    <Label htmlFor="firstName">Имя *</Label>
+                    <Input
+                      id="firstName"
+                      value={formData.firstName}
+                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       required
-                      className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="Иван Иванов"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Телефон <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
+                    <Label htmlFor="lastName">Фамилия *</Label>
+                    <Input
+                      id="lastName"
+                      value={formData.lastName}
+                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                       required
-                      className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="+7 (999) 123-45-67"
                     />
                   </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium mb-2">
-                      Email <span className="text-destructive">*</span>
-                    </label>
-                    <input
+                  <div>
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
                       type="email"
-                      name="email"
                       value={formData.email}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
-                      className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="example@email.com"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">Телефон *</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      required
                     />
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="border border-border rounded-lg p-6 bg-card">
-                <h2 className="text-2xl font-semibold mb-6">Адрес доставки</h2>
-                <div className="grid grid-cols-1 gap-4">
+              <Card className="p-6">
+                <h2 className="font-display font-bold text-2xl mb-6">Адрес доставки</h2>
+                <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Город <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="Москва"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Адрес <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="address"
+                    <Label htmlFor="address">Адрес *</Label>
+                    <Input
+                      id="address"
                       value={formData.address}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      placeholder="Улица, дом, квартира"
                       required
-                      className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="ул. Примерная, д. 1, кв. 10"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Индекс <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="zipCode"
-                      value={formData.zipCode}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="123456"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="city">Город *</Label>
+                      <Input
+                        id="city"
+                        value={formData.city}
+                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="postalCode">Индекс</Label>
+                      <Input
+                        id="postalCode"
+                        value={formData.postalCode}
+                        onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="border border-border rounded-lg p-6 bg-card">
-                <h2 className="text-2xl font-semibold mb-6">Способ оплаты</h2>
-                <div className="space-y-3">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="card"
-                      checked={formData.paymentMethod === 'card'}
-                      onChange={handleChange}
-                      className="w-4 h-4 text-primary"
-                    />
-                    <span className="flex items-center gap-2">
+              <Card className="p-6">
+                <h2 className="font-display font-bold text-2xl mb-6">Способ оплаты</h2>
+                <RadioGroup
+                  value={formData.paymentMethod}
+                  onValueChange={(value: 'card' | 'cash') => setFormData({ ...formData, paymentMethod: value })}
+                >
+                  <div className="flex items-center space-x-2 p-4 border rounded-lg hover:border-primary transition-colors">
+                    <RadioGroupItem value="card" id="card" />
+                    <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer flex-1">
                       <Icon name="CreditCard" size={20} />
-                      Оплата картой онлайн
-                    </span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="cash"
-                      checked={formData.paymentMethod === 'cash'}
-                      onChange={handleChange}
-                      className="w-4 h-4 text-primary"
-                    />
-                    <span className="flex items-center gap-2">
+                      <span>Банковская карта</span>
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 p-4 border rounded-lg hover:border-primary transition-colors">
+                    <RadioGroupItem value="cash" id="cash" />
+                    <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer flex-1">
                       <Icon name="Wallet" size={20} />
-                      Оплата при получении
-                    </span>
-                  </label>
-                </div>
-              </div>
+                      <span>Наличные при получении</span>
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </Card>
+            </div>
 
-              <div className="border border-border rounded-lg p-6 bg-card">
-                <h2 className="text-2xl font-semibold mb-6">Комментарий к заказу</h2>
-                <textarea
-                  name="comment"
-                  value={formData.comment}
-                  onChange={handleChange}
-                  rows={4}
-                  className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Укажите дополнительную информацию для курьера или пожелания к заказу"
-                />
-              </div>
+            <div className="lg:col-span-1">
+              <Card className="p-6 sticky top-24">
+                <h2 className="font-display font-bold text-2xl mb-6">Ваш заказ</h2>
 
-              <button
-                type="submit"
-                className="w-full bg-primary text-primary-foreground py-4 rounded-md font-semibold text-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
-              >
-                Подтвердить заказ
-                <Icon name="Check" size={20} />
-              </button>
-            </form>
-          </div>
-
-          <div className="lg:col-span-1">
-            <div className="border border-border rounded-lg p-6 bg-card sticky top-20">
-              <h2 className="text-2xl font-semibold mb-6">Ваш заказ</h2>
-              
-              <div className="space-y-4 mb-6">
-                {items.map((item) => (
-                  <div key={`${item.product.id}-${item.size}-${item.color}`} className="flex gap-3">
-                    <div className="w-16 h-20 bg-muted rounded-md overflow-hidden flex-shrink-0">
-                      <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                        <Icon name="Image" size={20} className="text-gray-400" />
+                <div className="space-y-4 mb-6">
+                  {items.map((item) => (
+                    <div key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}`} className="flex gap-4">
+                      <div className="w-16 h-16 bg-secondary rounded overflow-hidden flex-shrink-0">
+                        <img
+                          src={item.product.image}
+                          alt={item.product.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-sm truncate">{item.product.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {item.selectedSize} / {item.selectedColor} × {item.quantity}
+                        </p>
+                        <p className="text-sm font-bold mt-1">
+                          {(item.product.price * item.quantity).toLocaleString('ru-RU')} ₽
+                        </p>
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-sm">{item.product.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {item.size} • {item.color} • {item.quantity} шт.
-                      </p>
-                      <p className="font-semibold mt-1">
-                        {(item.product.price * item.quantity).toLocaleString('ru-RU')} ₽
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <div className="border-t border-border pt-4 space-y-2">
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Товары</span>
+                <Separator className="my-6" />
+
+                <div className="space-y-3 mb-6">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Товары</span>
+                    <span>{getTotalPrice().toLocaleString('ru-RU')} ₽</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Доставка</span>
+                    <span>{deliveryFee === 0 ? 'Бесплатно' : `${deliveryFee} ₽`}</span>
+                  </div>
+                </div>
+
+                <Separator className="my-6" />
+
+                <div className="flex justify-between text-xl font-display font-bold mb-6">
+                  <span>Итого:</span>
                   <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
                 </div>
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Доставка</span>
-                  <span className="text-green-600 font-medium">Бесплатно</span>
-                </div>
-                <div className="border-t border-border pt-2 mt-2">
-                  <div className="flex justify-between text-xl font-bold">
-                    <span>Итого</span>
-                    <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
-                  </div>
-                </div>
-              </div>
+
+                <Button type="submit" size="lg" className="w-full">
+                  Оформить заказ
+                </Button>
+
+                <p className="text-xs text-muted-foreground text-center mt-4">
+                  Нажимая кнопку, вы соглашаетесь с условиями обработки персональных данных
+                </p>
+              </Card>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

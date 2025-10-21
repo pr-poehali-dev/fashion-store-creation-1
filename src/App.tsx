@@ -6,13 +6,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import HomePage from "@/pages/HomePage";
-import CatalogPage from "@/pages/CatalogPage";
+import Home from "@/pages/Home";
+import Catalog from "@/pages/Catalog";
 import ProductPage from "@/pages/ProductPage";
-import CartPage from "@/pages/CartPage";
-import CheckoutPage from "@/pages/CheckoutPage";
-import ContactsPage from "@/pages/ContactsPage";
-import NotFound from "./pages/NotFound";
+import Cart from "@/pages/Cart";
+import Checkout from "@/pages/Checkout";
+import Contacts from "@/pages/Contacts";
 
 const queryClient = new QueryClient();
 
@@ -27,13 +26,12 @@ const App = () => (
             <Header />
             <main className="flex-1">
               <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/catalog" element={<CatalogPage />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/catalog" element={<Catalog />} />
                 <Route path="/product/:id" element={<ProductPage />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/contacts" element={<ContactsPage />} />
-                <Route path="*" element={<NotFound />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/contacts" element={<Contacts />} />
               </Routes>
             </main>
             <Footer />
