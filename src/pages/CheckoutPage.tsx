@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 
 export const CheckoutPage = () => {
-  const { items, getTotalPrice, clearCart } = useCart();
+  const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -52,8 +52,8 @@ export const CheckoutPage = () => {
     return null;
   }
 
-  const deliveryFee = getTotalPrice() >= 5000 ? 0 : 500;
-  const totalPrice = getTotalPrice() + deliveryFee;
+  const deliveryFee = totalPrice >= 5000 ? 0 : 500;
+  const finalTotal = totalPrice + deliveryFee;
 
   return (
     <div className="min-h-screen py-12">
@@ -172,7 +172,7 @@ export const CheckoutPage = () => {
 
                 <div className="space-y-4 mb-6">
                   {items.map((item) => (
-                    <div key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}`} className="flex gap-4">
+                    <div key={`${item.product.id}-${item.size}-${item.color}`} className="flex gap-4">
                       <div className="w-16 h-16 bg-secondary rounded overflow-hidden flex-shrink-0">
                         <img
                           src={item.product.image}
@@ -183,7 +183,7 @@ export const CheckoutPage = () => {
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-sm truncate">{item.product.name}</p>
                         <p className="text-xs text-muted-foreground">
-                          {item.selectedSize} / {item.selectedColor} × {item.quantity}
+                          {item.size} / {item.color} × {item.quantity}
                         </p>
                         <p className="text-sm font-bold mt-1">
                           {(item.product.price * item.quantity).toLocaleString('ru-RU')} ₽
@@ -198,7 +198,7 @@ export const CheckoutPage = () => {
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Товары</span>
-                    <span>{getTotalPrice().toLocaleString('ru-RU')} ₽</span>
+                    <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Доставка</span>
@@ -210,7 +210,7 @@ export const CheckoutPage = () => {
 
                 <div className="flex justify-between text-xl font-display font-bold mb-6">
                   <span>Итого:</span>
-                  <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
+                  <span>{finalTotal.toLocaleString('ru-RU')} ₽</span>
                 </div>
 
                 <Button type="submit" size="lg" className="w-full">

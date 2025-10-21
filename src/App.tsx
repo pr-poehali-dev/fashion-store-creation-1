@@ -4,14 +4,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Home from "@/pages/Home";
-import Catalog from "@/pages/Catalog";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import HomePage from "@/pages/HomePage";
+import CatalogPage from "@/pages/CatalogPage";
 import ProductPage from "@/pages/ProductPage";
-import Cart from "@/pages/Cart";
-import Checkout from "@/pages/Checkout";
-import Contacts from "@/pages/Contacts";
+import CartPage from "@/pages/CartPage";
+import CheckoutPage from "@/pages/CheckoutPage";
+import ContactsPage from "@/pages/ContactsPage";
 
 const queryClient = new QueryClient();
 
@@ -26,12 +26,12 @@ const App = () => (
             <Header />
             <main className="flex-1">
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/catalog" element={<Catalog />} />
+                <Route path="/" element={<HomePage />} />
+                <Route path="/catalog" element={<CatalogPage />} />
                 <Route path="/product/:id" element={<ProductPage />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/contacts" element={<ContactsPage />} />
               </Routes>
             </main>
             <Footer />
