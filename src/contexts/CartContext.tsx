@@ -1,21 +1,14 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { Product } from '@/types/product';
-
-export interface CartItem {
-  product: Product;
-  quantity: number;
-  size: string;
-  color: string;
-}
+import { CartItem, Product } from '@/types/product';
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (product: Product, size: string, color: string) => void;
-  removeFromCart: (id: string, size: string, color: string) => void;
-  updateQuantity: (id: string, size: string, color: string, quantity: number) => void;
+  addToCart: (product: Product, size: string, quantity?: number) => void;
+  removeFromCart: (productId: number, size: string) => void;
+  updateQuantity: (productId: number, size: string, quantity: number) => void;
   clearCart: () => void;
-  totalItems: number;
-  totalPrice: number;
+  getTotalPrice: () => number;
+  getTotalItems: () => number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -23,41 +16,41 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  const addToCart = (product: Product, size: string, color: string) => {
-    setItems(currentItems => {
-      const existingItem = currentItems.find(
-        item => item.product.id === product.id && item.size === size && item.color === color
+  const addToCart = (product: Product, size: string, quantity = 1) => {
+    setItems((prevItems) => {
+      const existingItem = prevItems.find(
+        (item) => item.product.id === product.id && item.size === size
       );
 
       if (existingItem) {
-        return currentItems.map(item =>
-          item.product.id === product.id && item.size === size && item.color === color
-            ? { ...item, quantity: item.quantity + 1 }
+        return prevItems.map((item) =>
+          item.product.id === product.id && item.size === size
+            ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
 
-      return [...currentItems, { product, quantity: 1, size, color }];
+      return [...prevItems, { product, size, quantity }];
     });
   };
 
-  const removeFromCart = (id: string, size: string, color: string) => {
-    setItems(currentItems =>
-      currentItems.filter(
-        item => !(item.product.id === id && item.size === size && item.color === color)
+  const removeFromCart = (productId: number, size: string) => {
+    setItems((prevItems) =>
+      prevItems.filter(
+        (item) => !(item.product.id === productId && item.size === size)
       )
     );
   };
 
-  const updateQuantity = (id: string, size: string, color: string, quantity: number) => {
+  const updateQuantity = (productId: number, size: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(id, size, color);
+      removeFromCart(productId, size);
       return;
     }
 
-    setItems(currentItems =>
-      currentItems.map(item =>
-        item.product.id === id && item.size === size && item.color === color
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.product.id === productId && item.size === size
           ? { ...item, quantity }
           : item
       )
@@ -68,8 +61,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([]);
   };
 
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const getTotalPrice = () => {
+    return items.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    );
+  };
+
+  const getTotalItems = () => {
+    return items.reduce((total, item) => total + item.quantity, 0);
+  };
 
   return (
     <CartContext.Provider
@@ -79,8 +80,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         removeFromCart,
         updateQuantity,
         clearCart,
-        totalItems,
-        totalPrice,
+        getTotalPrice,
+        getTotalItems,
       }}
     >
       {children}

@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Facebook, Mail, Phone, MapPin } from 'lucide-react';
+import Icon from '@/components/ui/icon';
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white mt-auto">
+    <footer className="border-t border-border bg-foreground text-background mt-auto">
       <div className="container mx-auto px-4 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-2xl font-bold font-display mb-4">
               NOIR<span className="text-primary">.</span>
             </h3>
-            <p className="text-sm text-white/70">
+            <p className="text-sm text-background/70">
               Минималистичная одежда для современных людей
             </p>
           </div>
@@ -19,22 +19,22 @@ export default function Footer() {
             <h4 className="font-semibold font-display mb-4">Навигация</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="text-white/70 hover:text-primary transition-colors">
+                <Link to="/" className="text-background/70 hover:text-primary transition-colors">
                   Главная
                 </Link>
               </li>
               <li>
-                <Link to="/catalog" className="text-white/70 hover:text-primary transition-colors">
+                <Link to="/catalog" className="text-background/70 hover:text-primary transition-colors">
                   Каталог
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-white/70 hover:text-primary transition-colors">
+                <Link to="/contact" className="text-background/70 hover:text-primary transition-colors">
                   Контакты
                 </Link>
               </li>
               <li>
-                <Link to="/cart" className="text-white/70 hover:text-primary transition-colors">
+                <Link to="/cart" className="text-background/70 hover:text-primary transition-colors">
                   Корзина
                 </Link>
               </li>
