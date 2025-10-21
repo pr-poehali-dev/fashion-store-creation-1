@@ -1,38 +1,40 @@
 import { Link } from 'react-router-dom';
-import Icon from '@/components/ui/icon';
+import { Instagram, Facebook, Mail, Phone, MapPin } from 'lucide-react';
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer className="border-t border-border bg-background mt-auto">
-      <div className="container mx-auto px-4 py-12">
+    <footer className="bg-black text-white mt-auto">
+      <div className="container mx-auto px-4 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h2 className="text-xl font-bold mb-4">FASHION</h2>
-            <p className="text-muted-foreground text-sm">
-              Минималистичная мода для современных людей. Качество и стиль в каждой детали.
+            <h3 className="text-2xl font-bold font-display mb-4">
+              NOIR<span className="text-primary">.</span>
+            </h3>
+            <p className="text-sm text-white/70">
+              Минималистичная одежда для современных людей
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Навигация</h3>
-            <ul className="space-y-2">
+            <h4 className="font-semibold font-display mb-4">Навигация</h4>
+            <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/" className="text-white/70 hover:text-primary transition-colors">
                   Главная
                 </Link>
               </li>
               <li>
-                <Link to="/catalog" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/catalog" className="text-white/70 hover:text-primary transition-colors">
                   Каталог
                 </Link>
               </li>
               <li>
-                <Link to="/contacts" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/contact" className="text-white/70 hover:text-primary transition-colors">
                   Контакты
                 </Link>
               </li>
               <li>
-                <Link to="/cart" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/cart" className="text-white/70 hover:text-primary transition-colors">
                   Корзина
                 </Link>
               </li>
@@ -40,49 +42,60 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Контакты</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h4 className="font-semibold font-display mb-4">Контакты</h4>
+            <ul className="space-y-3 text-sm text-white/70">
               <li className="flex items-center gap-2">
-                <Icon name="Phone" size={16} />
-                <span>+7 (999) 123-45-67</span>
+                <Phone className="h-4 w-4" />
+                <a href="tel:+79991234567" className="hover:text-primary transition-colors">
+                  +7 (999) 123-45-67
+                </a>
               </li>
               <li className="flex items-center gap-2">
-                <Icon name="Mail" size={16} />
-                <span>info@fashion.ru</span>
+                <Mail className="h-4 w-4" />
+                <a href="mailto:info@noir.shop" className="hover:text-primary transition-colors">
+                  info@noir.shop
+                </a>
               </li>
-              <li className="flex items-center gap-2">
-                <Icon name="MapPin" size={16} />
-                <span>Москва, ул. Примерная, 1</span>
+              <li className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 mt-0.5" />
+                <span>Москва, ул. Примерная, 123</span>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Социальные сети</h3>
+            <h4 className="font-semibold font-display mb-4">Социальные сети</h4>
             <div className="flex gap-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Icon name="Instagram" size={24} />
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors"
+              >
+                <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Icon name="Facebook" size={24} />
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors"
+              >
+                <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Icon name="Twitter" size={24} />
+              <a
+                href="mailto:info@noir.shop"
+                className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors"
+              >
+                <Mail className="h-5 w-5" />
               </a>
             </div>
-            <button className="mt-6 w-full bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
-              <Icon name="MessageCircle" size={16} />
-              Написать нам
-            </button>
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} FASHION. Все права защищены.</p>
+        <div className="border-t border-white/10 mt-8 pt-8 text-center text-sm text-white/50">
+          <p>&copy; {new Date().getFullYear()} NOIR. Все права защищены.</p>
         </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}
